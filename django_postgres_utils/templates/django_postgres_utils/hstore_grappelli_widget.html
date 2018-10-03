@@ -2,7 +2,7 @@
 <script type="text/html" id="hstore-row-template-{{ field_name }}" class="hstore-row-template-inline">
     <div class="l-2c-fluid l-d-4 grp-row grp-cells">
         <div class="c-1 grp-cell">
-            <input type="text" placeholder="{% trans 'key' %}" value="<%= key %>" style="min-width:150px;">
+            <input type="text" placeholder="{% trans 'attribute' %}" value="<%= key %>" style="min-width:150px;">
         </div>
         <div class="c-2 grp-cell">
             <input style="min-width:300px;float:left"
@@ -50,7 +50,7 @@
                 </div>
             <% } %>
             <% for(key in data){ %>
-                <%= _.template(django.jQuery('.hstore-row-template-inline').eq(0).html(), { 'key': key, 'value': data[key] }) %>
+                <% var t = _.template(django.jQuery('.hstore-row-template-inline').eq(0).html()); print(t({ 'key': key, 'value': data[key] })) %>
             <% } %>
         </div>
 

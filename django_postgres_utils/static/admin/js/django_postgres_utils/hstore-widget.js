@@ -39,7 +39,7 @@ var initDjangoHStoreWidget = function(hstore_field_name, inline_prefix) {
     var compileUI = function(params){
         var hstore_field_id = 'id_'+hstore_field_name,
             original_textarea = $('#'+hstore_field_id),
-            original_value = original_textarea.val(),
+            original_value = original_textarea.val().replace(/^"(.*)"$/, '$1'),
             original_container = original_textarea.parents('.form-row, .grp-row').eq(0),
             errorHtml = original_container.find('.errorlist').html(),
             json_data = {};
@@ -59,14 +59,15 @@ var initDjangoHStoreWidget = function(hstore_field_name, inline_prefix) {
                 "id": hstore_field_id,
                 "label": original_container.find('label').text(),
                 "name": hstore_field_name,
-                "value": original_textarea.val(),
+                "value": original_textarea.val().replace(/^"(.*)"$/, '$1'),
                 "help": original_container.find('.grp-help, .help').text(),
                 "errors": errorHtml,
                 "data": json_data
             },
             // compile template
             ui_html = retrieveTemplate('hstore-ui-template', hstore_field_name),
-            compiled_ui_html = _.template(ui_html, hstore_field_data);
+            compiled_ui_html = _.template(ui_html);
+            compiled_ui_html = compiled_ui_html(hstore_field_data);
 
         // this is just to DRY up a bit
         if(params && params.replace_original === true){
@@ -86,8 +87,10 @@ var initDjangoHStoreWidget = function(hstore_field_name, inline_prefix) {
 
     // cache other objects that we'll reuse
     var row_html = retrieveTemplate('hstore-row-template', hstore_field_name),
-        empty_row = _.template(row_html, { 'key': '', 'value': '' }),
+        empty_row = _.template(row_html),
         $hstore = $('#id_'+hstore_field_name).parents('.hstore');
+
+        empty_row = empty_row({ 'key': '', 'value': '' });
 
     // reusable function that updates the textarea value
     var updateTextarea = function(container) {

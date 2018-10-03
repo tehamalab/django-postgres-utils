@@ -30,6 +30,25 @@ Add it to your `INSTALLED_APPS`:
         ...
     )
 
+Sample usage usage of ``AdminHStoreWidget`` in admin:
+
+.. code-block:: python
+
+    # admin.py
+    from django.contrib import admin
+    from django.contrib.postgres.fields import HStoreField
+    from django_postgres_utils.widgets import AdminHStoreWidget
+    # ...
+
+    class MyModelAdmin(admin.ModelAdmin):
+
+        formfield_overrides = {
+            HStoreField: {'widget': AdminHStoreWidget},
+        }
+
+    # ...
+
+
 Features
 --------
 
